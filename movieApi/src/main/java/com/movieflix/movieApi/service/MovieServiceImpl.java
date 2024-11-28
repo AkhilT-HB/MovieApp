@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -71,11 +73,53 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public MovieDto getMovie(Integer movieId) {
-        return null;
+
+        // 1. check the data in DB and if exists, fetch the data of given ID
+        Movie movie = movieRepository.findById(movieId).orElseThrow(()-> new RuntimeException("Movie not found!"));
+
+        // 2. generate posterUrl
+        String posterUrl = baseUrl + "/file/" + movie.getPoster();
+
+        // 3. map to MovieDto object and return it
+        MovieDto responseMovieDto = new MovieDto(
+                movie.getMovieId(),
+                movie.getTitle(),
+                movie.getDirector(),
+                movie.getStudio(),
+                movie.getMovieCast(),
+                movie.getReleaseYear(),
+                movie.getPoster(),
+                posterUrl
+        );
+
+        return responseMovieDto;
     }
 
     @Override
     public List<MovieDto> getAllMovies() {
-        return List.of();
+
+        // 1. fetch all data from DB
+        List<Movie> movies = movieRepository.findAll();
+
+        List<MovieDto> movieDtos = new ArrayList<>();
+
+        // 2. iterate through the list, generate posterUrl for each movie obj,
+        // and map to MovieDto obj
+        for(Movie movie : movies){
+            String posterUrl = baseUrl + "/file/" + movie.getPoster();
+            MovieDto movieDto = new MovieDto(
+                    movie.getMovieId(),
+                    movie.getTitle(),
+                    movie.getDirector(),
+                    movie.getStudio(),
+                    movie.getMovieCast(),
+                    movie.getReleaseYear(),
+                    movie.getPoster(),
+                    posterUrl
+            );
+            movieDtos.add(movieDto);
+        }
+
+        return movieDtos;
     }
 }
