@@ -13,4 +13,8 @@ public interface MovieService {
     MovieDto getMovie(Integer movieId);
 
     List<MovieDto> getAllMovies();
+
+    MovieDto updateMovie(Integer movieId, MovieDto movieDto, MultipartFile file);
+
+    String deleteMovie(Integer movieId);
 }

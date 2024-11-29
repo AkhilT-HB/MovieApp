@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,10 @@ public class MovieServiceImpl implements MovieService{
     public MovieDto addMovie(MovieDto movieDto, MultipartFile file) throws IOException {
 
         // 1. upload the file
+
+        if(Files.exists(Paths.get(path + File.separator + file.getOriginalFilename()))){
+            throw new RuntimeException("File already exists! Please enter another file name!");
+        }
         String uploadedFileName = fileService.uploadFile(path, file);
 
         // 2. set the value of field 'poster' as filename
@@ -78,7 +84,7 @@ public class MovieServiceImpl implements MovieService{
         Movie movie = movieRepository.findById(movieId).orElseThrow(()-> new RuntimeException("Movie not found!"));
 
         // 2. generate posterUrl
-        String posterUrl = baseUrl + "/file/" + movie.getPoster();
+        String posterUrl = baseUrl + "/files/" + movie.getPoster();
 
         // 3. map to MovieDto object and return it
         MovieDto responseMovieDto = new MovieDto(
@@ -106,7 +112,7 @@ public class MovieServiceImpl implements MovieService{
         // 2. iterate through the list, generate posterUrl for each movie obj,
         // and map to MovieDto obj
         for(Movie movie : movies){
-            String posterUrl = baseUrl + "/file/" + movie.getPoster();
+            String posterUrl = baseUrl + "/files/" + movie.getPoster();
             MovieDto movieDto = new MovieDto(
                     movie.getMovieId(),
                     movie.getTitle(),
@@ -121,5 +127,15 @@ public class MovieServiceImpl implements MovieService{
         }
 
         return movieDtos;
+    }
+
+    @Override
+    public MovieDto updateMovie(Integer movieId, MovieDto movieDto, MultipartFile file) {
+        return null;
+    }
+
+    @Override
+    public String deleteMovie(Integer movieId) {
+        return "";
     }
 }
