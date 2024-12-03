@@ -1,6 +1,7 @@
 package com.movieflix.movieApi.service;
 
 import com.movieflix.movieApi.dto.MovieDto;
+import com.movieflix.movieApi.dto.MoviePageResponse;
 import com.movieflix.movieApi.entities.Movie;
 import com.movieflix.movieApi.exceptions.FileExistsException;
 import com.movieflix.movieApi.exceptions.MovieNotFoundException;
@@ -199,5 +200,15 @@ public class MovieServiceImpl implements MovieService{
         movieRepository.delete(mv);
 
         return "Movie deleted with id = " + id;
+    }
+
+    @Override
+    public MoviePageResponse getAllMoviesWithPagination(Integer pageNumber, Integer pageSize) {
+        return null;
+    }
+
+    @Override
+    public MoviePageResponse getAllMoviesWithPaginationAndSorting(Integer pageNumber, Integer pageSize, String sortBy, String dir) {
+        return null;
     }
 }
