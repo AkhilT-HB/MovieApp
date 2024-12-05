@@ -67,7 +67,7 @@ public class MovieServiceImpl implements MovieService{
         Movie savedMovie = movieRepository.save(movie);
 
         // 5. generate the posterUrl
-        String posterUrl = baseUrl + "/file/" + uploadedFileName;
+        String posterUrl = baseUrl + "/files/" + uploadedFileName;
 
         // 6. map Movie object to DTO object and return it
         MovieDto response = new MovieDto(
